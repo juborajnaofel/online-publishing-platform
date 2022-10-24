@@ -10,6 +10,8 @@ import {
   Routes,
   Route
 } from "react-router-dom";
+import ProfilePage from './pages/profilepage/ProfilePage';
+import PostManagerPage from './pages/postmanagerpage/PostManagerPage';
 
 
 function App() {
@@ -21,6 +23,8 @@ function App() {
         (<BrowserRouter>
             <Routes>
               <Route path='/' element={<FeedPage />} />
+              <Route path='/profile' element={<ProfilePage/>} />
+              <Route path='/posts-manager' element={<PostManagerPage/>} />
               <Route path='*' element={<NotfoundPage/>} />
             </Routes>
           </BrowserRouter>):

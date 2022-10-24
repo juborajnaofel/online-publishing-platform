@@ -6,7 +6,7 @@ export default function NavbarLogged() {
   return (
     <>
       <Navbar bg="light" variant="light">
-        <Container>
+        <Container fluid>
           <Navbar.Brand href="#home">OPP by Juboraj</Navbar.Brand>
           {/* <Nav className="me-auto">
             <Nav.Link href="#home">Home</Nav.Link>

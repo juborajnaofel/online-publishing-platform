@@ -2,8 +2,9 @@ import Layout from "../../components/generallayout";
 import SideBarMenu from "../../components/SideBarMenu";
 import NavbarLogged from "../../components/NavbarLogged";
 import PostCard from "../../components/PostCard";
+import ProfileInfoBox from "../../components/profileinfobox";
 import Alert from 'react-bootstrap/Alert';
-export default function FeedPage(){
+export default function ProfilePage(){
     const data = [
         { id:1, title:"sample title1", link: "sample link1", description:"this is a sample description1"},
         { id:2, title:"sample title2", link: "sample link2", description:"this is a sample description2"},
@@ -14,12 +15,12 @@ export default function FeedPage(){
     return <>
         <d>
             <NavbarLogged/>
+            <ProfileInfoBox/>
             <br/>
-            <Layout feedsidebar={<SideBarMenu active="home"/>}>
+            <Layout feedsidebar={<SideBarMenu active="profile"/>}>
                 <Alert variant={"dark"}>
-                    Posts by others
+                    Recent Posts by you
                 </Alert>
-
                 {
                     data.map((item, index)=>{
                         return <><PostCard key={item.id} title={item.title} description={item.description} link={item.link}/><br/></>     
