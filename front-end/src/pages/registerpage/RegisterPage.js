@@ -1,6 +1,6 @@
-import LoginForm from "../../components/LoginForm";
+import RegisterForm from "../../components/RegisterForm"
 export default function RegisterPage(){
     return <>
-        <h1>Register page</h1>
+        <RegisterForm/>
     </>
 }

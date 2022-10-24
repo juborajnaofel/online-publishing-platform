@@ -6,7 +6,7 @@ import Form from 'react-bootstrap/Form';
 import Card from 'react-bootstrap/Card';
 import { Link } from 'react-router-dom';
 
-export default function LoginForm() {
+export default function RegisterForm() {
   return (
     <Container fluid className='vertical-center'>
       <Row>
@@ -17,7 +17,7 @@ export default function LoginForm() {
         }}>
             <Card style={{maxWidth: 700}}>
                 <Card.Header className='text-center'>
-                    <h3>Login</h3>
+                    <h3>Create an account</h3>
                 </Card.Header>
                 <Card.Body>
                     <Form>
@@ -35,12 +35,12 @@ export default function LoginForm() {
                         </Form.Group>
 
                         <Button variant="primary" type="submit">
-                            Login
+                            Register
                         </Button>
                     </Form>
                 </Card.Body>
                 <Card.Footer>
-                    <p>Dont have an account? <Link to="/register">Register here</Link></p>
+                    <p>Already have an account? <Link to="/">Login here</Link></p>
                 </Card.Footer>
             </Card>
         </Col>

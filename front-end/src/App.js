@@ -2,7 +2,7 @@ import './App.css';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import LoginPage from './pages/loginpage/LoginPage';
 import NotfoundPage from './pages/notfoundpage/NotfoundPage';
-import ProfilePage from './pages/profilepage/ProfilePage';
+import FeedPage from './pages/feedpage/FeedPage';
 import RegisterPage from './pages/registerpage/RegisterPage';
 import { useEffect } from 'react';
 import {
@@ -17,10 +17,10 @@ function App() {
 
     return (
       <>
-        {false?
+        {true?
         (<BrowserRouter>
             <Routes>
-              <Route path='/' element={<ProfilePage />} />
+              <Route path='/' element={<FeedPage />} />
               <Route path='*' element={<NotfoundPage/>} />
             </Routes>
           </BrowserRouter>):
