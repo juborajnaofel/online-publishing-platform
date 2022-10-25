@@ -5,14 +5,23 @@ use App\Models\User;
 use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Validator;
 
 class LoginRegController extends Controller
 {
     public function login(Request $request){
-        $validated = $request->validate([
+        $validatedUserdata = Validator::make($request->all(),[
             'email' => 'required',
             'password' => 'required',
         ]);
+
+        if($validatedUserdata->fails()){
+            return response()->json([ 
+                "success"=> false,
+                "msg" => "Validation failed!",
+                "error" => $validatedUserdata->errors()
+            ]);
+        }
 
 
         $getUser = User::where("email", $request->email)->first();
@@ -27,11 +36,19 @@ class LoginRegController extends Controller
     }
 
     public function register(Request $request){
-        $validated = $request->validate([
+        $validatedUserdata = Validator::make($request->all(),[
             'name' => 'required',
             'email' => 'required',
             'password' => 'required',
         ]);
+
+        if($validatedUserdata->fails()){
+            return response()->json([ 
+                "success"=> false,
+                "msg" => "Validation failed!",
+                "error" => $validatedUserdata->errors()
+            ]);
+        }
 
         try{
             $inputs = ['name' => $request->name,'email' => $request->email, 'password' => Hash::make($request->password)];
