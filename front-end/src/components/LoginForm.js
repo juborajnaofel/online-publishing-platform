@@ -4,7 +4,7 @@ import Col from 'react-bootstrap/Col';
 import Button from 'react-bootstrap/Button';
 import Form from 'react-bootstrap/Form';
 import Card from 'react-bootstrap/Card';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { useState } from 'react';
 import { BackendApi } from '../config/BackendApi';
 import { UserContext } from '../context/UserContext';
@@ -14,7 +14,7 @@ export default function LoginForm() {
     const [password, setPassword] = useState("");
 
     const userCtx = useContext(UserContext);
-
+    const navigate = useNavigate();
 
     function getPass(event) {
         setPassword(event.target.value)
@@ -50,7 +50,7 @@ export default function LoginForm() {
             localStorage.setItem("token", data.token);
             localStorage.setItem("islogged", true);
             userCtx.setlogin_trigger();
-            alert(userCtx.login_trigger);
+            navigate('/');
           }
         });
     }

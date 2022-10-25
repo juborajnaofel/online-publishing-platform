@@ -4,7 +4,7 @@ import Col from 'react-bootstrap/Col';
 import Button from 'react-bootstrap/Button';
 import Form from 'react-bootstrap/Form';
 import Card from 'react-bootstrap/Card';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { useState } from 'react';
 import { BackendApi } from '../config/BackendApi';
 import { UserContext } from '../context/UserContext';
@@ -16,6 +16,7 @@ export default function RegisterForm() {
     const [password, setPassword] = useState("");
     const [confirm_password, setConfPassword] = useState("");
 
+    const navigate = useNavigate();
     const userCtx = useContext(UserContext);
     
     function getPass(event) {
@@ -69,6 +70,7 @@ export default function RegisterForm() {
               localStorage.setItem("token", data.token);
               localStorage.setItem("islogged", true);
               userCtx.setlogin_trigger();
+              navigate('/');
             }
           });
     }

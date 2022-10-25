@@ -1,16 +1,16 @@
 import Card from 'react-bootstrap/Card';
 import ListGroup from 'react-bootstrap/ListGroup';
 import Badge from 'react-bootstrap/Badge';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { UserContext } from '../context/UserContext';
 import { useContext } from 'react';
 import { BackendApi } from '../config/BackendApi';
 
 export default function SideBarMenu(props) {
   const userCtx = useContext(UserContext);
+  const navigate = useNavigate();
 
   function logout(){
-    alert("loging out...");
     fetch(BackendApi.baseurl+'/api/logout', {
       method: 'POST',
       headers: {
@@ -24,6 +24,7 @@ export default function SideBarMenu(props) {
         localStorage.removeItem('token')
         localStorage.removeItem("islogged")
         userCtx.setlogin_trigger();
+        navigate('/');
       }
     });
   }
