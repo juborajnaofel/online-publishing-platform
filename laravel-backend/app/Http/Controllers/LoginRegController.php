@@ -1,6 +1,7 @@
 <?php
 
 namespace App\Http\Controllers;
+use Illuminate\Support\Facades\DB;
 use App\Models\User;
 use Exception;
 use Illuminate\Http\Request;
@@ -10,52 +11,76 @@ use Illuminate\Support\Facades\Validator;
 class LoginRegController extends Controller
 {
     public function login(Request $request){
-        $validatedUserdata = Validator::make($request->all(),[
-            'email' => 'required',
-            'password' => 'required',
-        ]);
-
-        if($validatedUserdata->fails()){
-            return response()->json([ 
-                "success"=> false,
-                "msg" => "Validation failed!",
-                "error" => $validatedUserdata->errors()
+        try{
+            $validatedUserdata = Validator::make($request->all(),[
+                'email' => 'required',
+                'password' => 'required',
             ]);
-        }
-
-
-        $getUser = User::where("email", $request->email)->first();
-        if($getUser != NULL){
-            if(Hash::check($request->password,$getUser->password)){
-                return response()->json([ "success"=> true,"msg" => "Login successfully done"]);
+    
+            if($validatedUserdata->fails()){
+                return response()->json([ 
+                    "success"=> false,
+                    "msg" => "Validation failed!",
+                    "error" => $validatedUserdata->errors()
+                ]);
             }
-            return response()->json([ "success"=> false,"msg" => "Incorrect Password!"]);
+
+
+            $getUser = User::where("email", $request->email)->first();
+            if($getUser != NULL){
+                if(Hash::check($request->password,$getUser->password)){
+                    return response()->json([ 
+                        "success"=> true,
+                        "msg" => "Login successfully done",
+                        "token" => $getUser->createToken("API TOKEN")->plainTextToken
+                    ],200);
+                }
+                return response()->json([ "success"=> false,"msg" => "Incorrect Password!"],401);
+            }
+    
+            return response()->json([ "success"=> false,"msg" => "Email not found!"],404);
+        }catch(Exception $e){
+            return response()->json([ "success"=> false,"msg" => "Something went wrong!"],500);
         }
 
-        return response()->json([ "success"=> false,"msg" => "Email not found!"]);
     }
 
     public function register(Request $request){
-        $validatedUserdata = Validator::make($request->all(),[
-            'name' => 'required',
-            'email' => 'required',
-            'password' => 'required',
-        ]);
-
-        if($validatedUserdata->fails()){
-            return response()->json([ 
-                "success"=> false,
-                "msg" => "Validation failed!",
-                "error" => $validatedUserdata->errors()
-            ]);
-        }
-
         try{
+            $validatedUserdata = Validator::make($request->all(),[
+                'name' => 'required',
+                'email' => 'required',
+                'password' => 'required',
+            ]);
+    
+            if($validatedUserdata->fails()){
+                return response()->json([ 
+                    "success"=> false,
+                    "msg" => "Validation failed!",
+                    "error" => $validatedUserdata->errors()
+                ]);
+            }
+
+
             $inputs = ['name' => $request->name,'email' => $request->email, 'password' => Hash::make($request->password)];
-            User::create($inputs);
-            return response()->json([ "success"=> true,"msg" => "Registration successfully done"]);
+            $user = User::create($inputs);
+            return response()->json([ 
+                "success"=> true,
+                "msg" => "Registration successfully done",
+                "token" => $user->createToken("API TOKEN")->plainTextToken
+            ],201);
+
         }catch(Exception $e){
-            return response()->json([ "success"=> true,"msg" => "Something went wrong!"]);
+            return response()->json([ "success"=> false,"msg" => "Something went wrong!"],500);
+        }
+    }
+
+    public function logout(){
+        try{
+            DB::table('personal_access_tokens')->where('tokenable_id', auth()->user()->id)->delete();
+            return response()->json([ "success"=> true,"msg" => "Successfully loged out"],200);
+        }catch(Exception $e){
+            return response()->json([ "success"=> false,"msg" => "Something went wrong!"],500);
         }
     }
 }
