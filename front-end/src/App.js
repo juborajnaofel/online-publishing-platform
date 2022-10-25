@@ -1,19 +1,11 @@
 import './App.css';
 import 'bootstrap/dist/css/bootstrap.min.css';
-import { useEffect } from 'react';
+import UserContextProvider from './context/UserContext';
 
-
-import LoggedRoutes from './routes/LoggedRoutes';
-import GuestRoutes from './routes/GuestRoutes';
-
-
+import Auth from './Auth';
 function App() {
-    useEffect(()=>{},[]);
-
     return (
-      <>
-        {false? <LoggedRoutes/>: <GuestRoutes/>}
-      </>
+        <UserContextProvider><Auth/></UserContextProvider>
     );
 }
 

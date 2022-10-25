@@ -7,6 +7,8 @@ import Card from 'react-bootstrap/Card';
 import { Link } from 'react-router-dom';
 import { useState } from 'react';
 import { BackendApi } from '../config/BackendApi';
+import { UserContext } from '../context/UserContext';
+import { useContext } from 'react';
 
 export default function RegisterForm() {
     const [name, setName] = useState("");
@@ -14,7 +16,7 @@ export default function RegisterForm() {
     const [password, setPassword] = useState("");
     const [confirm_password, setConfPassword] = useState("");
 
-
+    const userCtx = useContext(UserContext);
     
     function getPass(event) {
         setPassword(event.target.value)
@@ -66,10 +68,7 @@ export default function RegisterForm() {
             if(data.success === true){
               localStorage.setItem("token", data.token);
               localStorage.setItem("islogged", true);
-  
-              // console.log("successfully logged in");
-              // console.log(payload)
-              //login state trigger should be here
+              userCtx.setlogin_trigger();
             }
           });
     }

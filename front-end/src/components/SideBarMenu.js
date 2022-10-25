@@ -2,7 +2,33 @@ import Card from 'react-bootstrap/Card';
 import ListGroup from 'react-bootstrap/ListGroup';
 import Badge from 'react-bootstrap/Badge';
 import { Link } from 'react-router-dom';
+import { UserContext } from '../context/UserContext';
+import { useContext } from 'react';
+import { BackendApi } from '../config/BackendApi';
+
 export default function SideBarMenu(props) {
+  const userCtx = useContext(UserContext);
+
+  function logout(){
+    alert("loging out...");
+    fetch(BackendApi.baseurl+'/api/logout', {
+      method: 'POST',
+      headers: {
+        Accept: 'application/json',
+        'Content-Type': 'application/json',
+        'Authorization': 'Bearer '+localStorage.getItem("token") 
+      }
+    }).then((response) => response.json())
+    .then((data) => {
+      if(data.success === true){
+        localStorage.removeItem('token')
+        localStorage.removeItem("islogged")
+        userCtx.setlogin_trigger();
+      }
+    });
+  }
+
+
   return (
     <Card style={{ maxWidth:"100%" }}>
       {/* <Card.Img variant="top" src="holder.js/100px180?text=Image cap" /> */}
@@ -24,7 +50,7 @@ export default function SideBarMenu(props) {
         <ListGroup.Item><Link className={ props.active === "changemembership"?'activemenulink':'menulink' } to="/change-membership">Switch Membership plan</Link></ListGroup.Item>
       </ListGroup>
       <Card.Body>
-        <ListGroup.Item><Link className='menulink' to="/">Logout</Link></ListGroup.Item>
+        <ListGroup.Item><Link className='menulink'  onClick={logout}>Logout</Link></ListGroup.Item>
       </Card.Body>
     </Card>
   );
