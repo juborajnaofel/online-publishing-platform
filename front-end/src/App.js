@@ -12,7 +12,7 @@ function App() {
 
     return (
       <>
-        {true? <LoggedRoutes/>: <GuestRoutes/>}
+        {false? <LoggedRoutes/>: <GuestRoutes/>}
       </>
     );
 }
