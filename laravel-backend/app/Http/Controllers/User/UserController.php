@@ -118,7 +118,7 @@ class UserController extends Controller
     public function userPostsScheduled(){
         try{
             $posts = Post::where('user_id', auth()->user()->id)
-            ->where('status', 'sheduled')
+            ->where('status', 'scheduled')
             ->get();
             return response()->json([ "success"=> true,
                                     "msg" => "User's drafts",

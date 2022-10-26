@@ -111,7 +111,37 @@ class PostController extends Controller
     }
 
     public function schedule(Request $request){
-        return "Coming soon...";
+        try{
+            $validatedUserdata = Validator::make($request->all(),[
+                'title' => 'required',
+                'description' => 'required',
+                'datetime' => 'required'
+            ]);
+    
+            if($validatedUserdata->fails()){
+                return response()->json([ 
+                    "success"=> false,
+                    "msg" => "Validation failed!",
+                    "error" => $validatedUserdata->errors()
+                ]);
+            }
+
+            $inputs = ['user_id'=> auth()->user()->id,
+                        'title' => $request->title,
+                        'description' => $request->description, 
+                        'status' => "scheduled", 
+                        'scheduled_at'=> $request->datetime];
+
+            $post = Post::create($inputs);
+            return response()->json([ 
+                "success"=> true,
+                "post"=> $post,
+                "msg" => "Scheduled successfully",
+            ],201);   
+
+        }catch(Exception $e){
+            return response()->json([ "success"=> false,"msg" => "Server Error"],500);
+        }
     }
     public function edit(Request $request, $id){
         try{

@@ -13,6 +13,7 @@ class Post extends Model
         'title',
         'description',
         'user_id',
-        'status'
+        'status',
+        'scheduled_at'
     ];
 }

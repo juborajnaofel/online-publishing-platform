@@ -43,6 +43,22 @@ export default function PostManagerTab() {
   },[]);
   
 
+  useEffect(()=>{
+    fetch(BackendApi.baseurl+'/api/posts/scheduled', {
+    method: 'GET',
+    headers: {
+        Accept: 'application/json',
+        'Content-Type': 'application/json',
+        'Authorization': 'Bearer '+localStorage.getItem("token") 
+    },
+    }).then((response) => response.json())
+    .then((data) => {
+        if(data.success === true){
+            setDataScheduled(data.data);
+        }
+    });
+  },[]);
+
 
   return (
     <Tabs
@@ -54,21 +70,26 @@ export default function PostManagerTab() {
       <Tab eventKey="draft" title="Draft">
         {
             data_draft.map((item, index)=>{
-                return <><PostCard key={item.id} title={item.title} description={item.description} link={item.link}/><br/></>    
+      
+                return <><PostCard key={item.id} title={item.title} description={item.description} 
+                created_at={ typeof item.created_at === "string"? item.created_at.slice(0,16).replace('T', ' '): "" }/><br/></>    
             })
         }
       </Tab>
       <Tab eventKey="scheduled" title="Scheduled">
             {
                 data_scheduled.map((item, index)=>{
-                    return <><PostCard key={item.id} title={item.title} description={item.description} link={item.link}/><br/></>    
+                    return <><PostCard key={item.id} title={item.title} description={item.description}
+                    scheduled_at= {item.scheduled_at}
+                    created_at={ typeof item.created_at === "string"? item.created_at.slice(0,16).replace('T', ' '): "" }/><br/></>  
                 })
             }
       </Tab>
       <Tab eventKey="published" title="Published">
         {
             data_published.map((item, index)=>{
-                return <><PostCard key={item.id} title={item.title} description={item.description} link={item.link}/><br/></>    
+                return <><PostCard key={item.id} title={item.title} description={item.description}
+                created_at={ typeof item.created_at === "string"? item.created_at.slice(0,16).replace('T', ' '): "" }/><br/></>  
             })
         }
       </Tab>

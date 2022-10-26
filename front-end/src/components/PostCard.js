@@ -9,7 +9,17 @@ export default function PostCard(props) {
         <Card.Text>
             {props.description}
         </Card.Text>
-        <Button variant="primary">{props.link}</Button>
+        <Card.Text>
+            Created at: {props.created_at}
+        </Card.Text>
+        {
+          props.scheduled_at && 
+          <Card.Text>
+            Scheduled at: {props.scheduled_at}
+          </Card.Text>
+        }
+
+        {/* <Button variant="primary">{props.link}</Button> */}
       </Card.Body>
     </Card>
   );

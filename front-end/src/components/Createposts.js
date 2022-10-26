@@ -7,10 +7,15 @@ import MembershipAlert from './membershipAlert';
 export default function CreatePostForm(){
     const [title, setTitle] = useState("");
     const [des, setDes] = useState("");
+    const [dt, setDt] = useState("");
 
 
     const navigate = useNavigate();
 
+
+    function getDt(e){
+      setDt(e.target.value)
+    }
     function save_draft(){
         const payload = {
             title: title,
@@ -71,7 +76,37 @@ export default function CreatePostForm(){
           });
     }
     function schedule_post(){
-        alert("schedule...");
+      const payload = {
+        title: title,
+        description: des,
+        datetime:dt
+      }
+  
+      if(title === ''){
+        return alert('Title field cannot be empty!')
+      }
+      if(des === ''){
+        return alert('Description field cannot be empty!')
+      }
+      if(dt === ''){
+        return alert('Datetime field cannot be empty!')
+      }
+
+
+      fetch(BackendApi.baseurl+'/api/post/schedule', {
+        method: 'POST',
+        headers: {
+          Accept: 'application/json',
+          'Content-Type': 'application/json',
+          'Authorization': 'Bearer '+localStorage.getItem("token") 
+        },
+        body: JSON.stringify(payload)
+      }).then((response) => response.json())
+      .then((data) => {
+        if(data.success === true){
+          navigate('/posts-manager');
+        }
+      });
     } 
 
     function getTitle(event){
@@ -93,6 +128,10 @@ export default function CreatePostForm(){
                 <Form.Group className="mb-3" controlId="exampleForm.ControlTextarea1">
                     <Form.Label>Description:</Form.Label>
                     <Form.Control as="textarea" onChange={getDescription}  placeholder="Enter your post description here..."  rows={12} />
+                </Form.Group>
+                <Form.Group className="mb-3" controlId="exampleForm.ControlTextarea1">
+                    <Form.Label>preferred time to publish:</Form.Label>
+                    <Form.Control  onChange={getDt} type="datetime-local"/>
                 </Form.Group>
             </div>
             <div>
