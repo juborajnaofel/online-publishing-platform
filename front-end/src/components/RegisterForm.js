@@ -69,6 +69,8 @@ export default function RegisterForm() {
             if(data.success === true){
               localStorage.setItem("token", data.token);
               localStorage.setItem("islogged", true);
+              localStorage.setItem("userdata", JSON.stringify(data.userdata));
+              localStorage.setItem("membership", JSON.stringify(data.membership));
               userCtx.setlogin_trigger();
               navigate('/');
             }

@@ -1,10 +1,11 @@
 import Card from 'react-bootstrap/Card';
 import ListGroup from 'react-bootstrap/ListGroup';
-import Badge from 'react-bootstrap/Badge';
+
 import { Link, useNavigate } from 'react-router-dom';
 import { UserContext } from '../context/UserContext';
 import { useContext } from 'react';
 import { BackendApi } from '../config/BackendApi';
+import MembershipCard from './membership';
 
 export default function SideBarMenu(props) {
   const userCtx = useContext(UserContext);
@@ -23,6 +24,8 @@ export default function SideBarMenu(props) {
       if(data.success === true){
         localStorage.removeItem('token')
         localStorage.removeItem("islogged")
+        localStorage.removeItem("membership")
+        localStorage.removeItem("userdata")
         userCtx.setlogin_trigger();
         navigate('/');
       }
@@ -35,11 +38,8 @@ export default function SideBarMenu(props) {
       {/* <Card.Img variant="top" src="holder.js/100px180?text=Image cap" /> */}
       {props.active !== 'profile' && 
       <Card.Body>
-        <Card.Title>I.E.U. Juboraj Naofel</Card.Title>
-        <Card.Text>
-          Membership: {"\u00A0"}      
-          { false ? <Badge bg="warning" text="dark">Free</Badge>:<Badge bg="success" text="light">Premium</Badge> }
-        </Card.Text>
+        <Card.Title>{JSON.parse(localStorage.getItem("userdata"))["name"]}</Card.Title>
+        <MembershipCard/>
       </Card.Body>
       }
       <ListGroup className="list-group-flush">

@@ -136,7 +136,7 @@ class UserController extends Controller
             ->where('status', 'published')
             ->get();
             return response()->json([ "success"=> true,
-                                    "msg" => "User's drafts",
+                                    "msg" => "User's Published",
                                     "total_records"=> $posts->count(),
                                     "data" => $posts
                                 ],200);
@@ -149,6 +149,7 @@ class UserController extends Controller
         try{
             $posts = Post::where('user_id','!=',auth()->user()->id)
             ->where('status', 'published')
+            ->orderBy('created_at', "DESC")
             ->get();
             return response()->json([ "success"=> true,
                                     "msg" => "User's drafts",

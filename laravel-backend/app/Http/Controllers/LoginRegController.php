@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 use Illuminate\Support\Facades\DB;
 use App\Models\User;
+use App\Models\User\Membership;
 use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
@@ -32,7 +33,9 @@ class LoginRegController extends Controller
                     return response()->json([ 
                         "success"=> true,
                         "msg" => "Login successfully done",
-                        "token" => $getUser->createToken("API TOKEN")->plainTextToken
+                        "token" => $getUser->createToken("API TOKEN")->plainTextToken,
+                        "userdata" =>$getUser,
+                        "membership" => Membership::where('user_id', $getUser->id)->orderBy('id', 'DESC')->first()
                     ],200);
                 }
                 return response()->json([ "success"=> false,"msg" => "Incorrect Password!"],401);
@@ -67,7 +70,9 @@ class LoginRegController extends Controller
             return response()->json([ 
                 "success"=> true,
                 "msg" => "Registration successfully done",
-                "token" => $user->createToken("API TOKEN")->plainTextToken
+                "token" => $user->createToken("API TOKEN")->plainTextToken,
+                "userdata" => $user,
+                "membership" => null
             ],201);
 
         }catch(Exception $e){
