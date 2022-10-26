@@ -1,15 +1,49 @@
 import Tab from 'react-bootstrap/Tab';
 import Tabs from 'react-bootstrap/Tabs';
 import PostCard from './PostCard';
-import Alert from 'react-bootstrap/Alert';
+import { useEffect, useState } from 'react';
+import { BackendApi } from '../config/BackendApi';
 export default function PostManagerTab() {
-    const data = [
-        { id:1, title:"sample title1", link: "sample link1", description:"this is a sample description1"},
-        { id:2, title:"sample title2", link: "sample link2", description:"this is a sample description2"},
-        { id:3, title:"sample title3", link: "sample link3", description:"this is a sample description3"},
-        { id:4, title:"sample title4", link: "sample link4", description:"this is a sample description4"},
-        { id:5, title:"sample title5", link: "sample link5", description:"this is a sample description5"}
-    ]
+  
+  const [data_draft, setDraft] = useState([]);
+  const [data_published, setDataPublished] = useState([]);
+  const [data_scheduled, setDataScheduled] = useState([]);
+
+  useEffect(()=>{
+    fetch(BackendApi.baseurl+'/api/posts/draft', {
+    method: 'GET',
+    headers: {
+        Accept: 'application/json',
+        'Content-Type': 'application/json',
+        'Authorization': 'Bearer '+localStorage.getItem("token") 
+    },
+    }).then((response) => response.json())
+    .then((data) => {
+        if(data.success === true){
+            setDraft(data.data);
+        }
+    });
+  },[]);
+
+
+  useEffect(()=>{
+    fetch(BackendApi.baseurl+'/api/posts/published', {
+    method: 'GET',
+    headers: {
+        Accept: 'application/json',
+        'Content-Type': 'application/json',
+        'Authorization': 'Bearer '+localStorage.getItem("token") 
+    },
+    }).then((response) => response.json())
+    .then((data) => {
+        if(data.success === true){
+            setDataPublished(data.data);
+        }
+    });
+  },[]);
+  
+
+
   return (
     <Tabs
       defaultActiveKey="draft"
@@ -18,31 +52,22 @@ export default function PostManagerTab() {
       fill
     >
       <Tab eventKey="draft" title="Draft">
-        <Alert variant={"dark"}>
-            Your posts
-        </Alert>
         {
-            data.map((item, index)=>{
+            data_draft.map((item, index)=>{
                 return <><PostCard key={item.id} title={item.title} description={item.description} link={item.link}/><br/></>    
             })
         }
       </Tab>
       <Tab eventKey="scheduled" title="Scheduled">
-        <Alert variant={"dark"}>
-                Your posts
-            </Alert>
             {
-                data.map((item, index)=>{
+                data_scheduled.map((item, index)=>{
                     return <><PostCard key={item.id} title={item.title} description={item.description} link={item.link}/><br/></>    
                 })
             }
       </Tab>
       <Tab eventKey="published" title="Published">
-        <Alert variant={"dark"}>
-            Your posts
-        </Alert>
         {
-            data.map((item, index)=>{
+            data_published.map((item, index)=>{
                 return <><PostCard key={item.id} title={item.title} description={item.description} link={item.link}/><br/></>    
             })
         }

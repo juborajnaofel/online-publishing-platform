@@ -1,5 +1,6 @@
 <?php
 use App\Http\Controllers\LoginRegController;
+use App\Http\Controllers\User\PostController;
 use App\Http\Controllers\User\UserController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
@@ -37,6 +38,12 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
     Route::post('/user/update', [UserController::class, "updateUserData"]);
     Route::post('/user/update-password', [UserController::class, "updateUserPassword"]);
     Route::post('/user/update-membership', [UserController::class, "switchUserMembership"]);
+
+
+
+    Route::post('/post/save-draft', [PostController::class, "save_draft"]);
+    Route::post('/post/publish', [PostController::class, "publish_uncreated"]);
+    Route::post('/post/publish-created/{id}', [PostController::class, "publish_created"]);
 
     
 

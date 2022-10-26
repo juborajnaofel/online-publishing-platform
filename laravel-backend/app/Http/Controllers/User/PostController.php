@@ -4,7 +4,6 @@ namespace App\Http\Controllers\User;
 
 use App\Http\Controllers\Controller;
 use App\Models\User\Post;
-use App\Models\User\Membership;
 use Illuminate\Http\Request;
 use Exception;
 use Illuminate\Support\Facades\Validator;
@@ -58,8 +57,8 @@ class PostController extends Controller
             $post = Post::create($inputs);
             return response()->json([ 
                 "success"=> true,
-                "id"=> $post->id,
                 "msg" => "Draft saved successfully",
+                "post" => $post
             ],201);   
 
         }catch(Exception $e){
@@ -86,7 +85,7 @@ class PostController extends Controller
             $post = Post::create($inputs);
             return response()->json([ 
                 "success"=> true,
-                "id"=> $post->id,
+                "post"=> $post,
                 "msg" => "Published successfully",
             ],201);   
 
@@ -102,7 +101,7 @@ class PostController extends Controller
             $post->save();
             return response()->json([ 
                 "success"=> true,
-                "id"=> $post->id,
+                "post"=> $post,
                 "msg" => "Published successfully",
             ],201);   
 
@@ -136,7 +135,7 @@ class PostController extends Controller
             $post->save();
             return response()->json([ 
                 "success"=> true,
-                "id"=> $post->id,
+                "post"=> $post,
                 "msg" => "Successfully edited",
             ],201);   
 

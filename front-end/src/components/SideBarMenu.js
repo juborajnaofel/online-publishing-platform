@@ -22,10 +22,7 @@ export default function SideBarMenu(props) {
     }).then((response) => response.json())
     .then((data) => {
       if(data.success === true){
-        localStorage.removeItem('token')
-        localStorage.removeItem("islogged")
-        localStorage.removeItem("membership")
-        localStorage.removeItem("userdata")
+        localStorage.setItem("islogged", "false")
         userCtx.setlogin_trigger();
         navigate('/');
       }

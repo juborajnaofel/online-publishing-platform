@@ -147,8 +147,7 @@ class UserController extends Controller
 
     public function userFeedLoad(){
         try{
-            $posts = Post::where('user_id','!=',auth()->user()->id)
-            ->where('status', 'published')
+            $posts = Post::where('status', 'published')
             ->orderBy('created_at', "DESC")
             ->get();
             return response()->json([ "success"=> true,

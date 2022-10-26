@@ -1,22 +1,106 @@
+import { useState } from 'react';
 import Button from 'react-bootstrap/Button';
 import Form from 'react-bootstrap/Form';
-
+import { BackendApi } from '../config/BackendApi';
+import { useNavigate } from 'react-router-dom';
+import MembershipAlert from './membershipAlert';
 export default function CreatePostForm(){
+    const [title, setTitle] = useState("");
+    const [des, setDes] = useState("");
+
+
+    const navigate = useNavigate();
+
+    function save_draft(){
+        const payload = {
+            title: title,
+            description: des
+          }
+      
+          if(title === ''){
+            return alert('Title field cannot be empty!')
+          }
+          if(des === ''){
+            return alert('Description field cannot be empty!')
+          }
+
+
+          fetch(BackendApi.baseurl+'/api/post/save-draft', {
+            method: 'POST',
+            headers: {
+              Accept: 'application/json',
+              'Content-Type': 'application/json',
+              'Authorization': 'Bearer '+localStorage.getItem("token") 
+            },
+            body: JSON.stringify(payload)
+          }).then((response) => response.json())
+          .then((data) => {
+            if(data.success === true){
+              navigate('/posts-manager');
+            }
+          });
+    }
+
+    function publish_now(){
+        const payload = {
+            title: title,
+            description: des
+          }
+      
+          if(title === ''){
+            return alert('Title field cannot be empty!')
+          }
+          if(des === ''){
+            return alert('Description field cannot be empty!')
+          }
+
+
+          fetch(BackendApi.baseurl+'/api/post/publish', {
+            method: 'POST',
+            headers: {
+              Accept: 'application/json',
+              'Content-Type': 'application/json',
+              'Authorization': 'Bearer '+localStorage.getItem("token") 
+            },
+            body: JSON.stringify(payload)
+          }).then((response) => response.json())
+          .then((data) => {
+            if(data.success === true){
+              navigate('/posts-manager');
+            }
+          });
+    }
+    function schedule_post(){
+        alert("schedule...");
+    } 
+
+    function getTitle(event){
+        setTitle(event.target.value)
+    }
+
+    function getDescription(event){
+        setDes(event.target.value)
+    }
+
+
+
     return <>
             <div>
                 <Form.Group className="mb-3" controlId="exampleForm.ControlInput1">
                     <Form.Label>Title:</Form.Label>
-                    <Form.Control type="input" placeholder="Enter your post title here..." />
+                    <Form.Control type="input" placeholder="Enter your post title here..." onChange={getTitle} />
                 </Form.Group>
                 <Form.Group className="mb-3" controlId="exampleForm.ControlTextarea1">
                     <Form.Label>Description:</Form.Label>
-                    <Form.Control as="textarea"  placeholder="Enter your post description here..."  rows={12} />
+                    <Form.Control as="textarea" onChange={getDescription}  placeholder="Enter your post description here..."  rows={12} />
                 </Form.Group>
             </div>
             <div>
-                <Button variant="secondary">Save Draft</Button>{' '}
-                <Button variant="success">Schedule Publish</Button>{' '}
-                <Button variant="success">Publish Now</Button>{' '}
+                <Button variant="secondary" onClick={save_draft}>Save Draft</Button>{' '}
+                <Button variant="success" onClick={schedule_post}>Schedule Publish</Button>{' '}
+                <Button variant="success" onClick={publish_now}>Publish Now</Button>{' '}
             </div>
+            <br/>
+            <MembershipAlert/>
         </>
 }

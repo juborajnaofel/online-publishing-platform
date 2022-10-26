@@ -17,7 +17,7 @@ export default function FeedPage(){
     const [data, setData] = useState([]);
     useEffect(()=>{
         fetch(BackendApi.baseurl+'/api/home', {
-        method: 'POST',
+        method: 'GET',
         headers: {
             Accept: 'application/json',
             'Content-Type': 'application/json',
