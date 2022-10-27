@@ -11,7 +11,7 @@ export default function SettingsPage(){
             <br/>
             <Layout feedsidebar={<SideBarMenu active="settings"/>}>
                 <Alert variant={"dark"}>
-                    Write something
+                    Settings
                 </Alert>
                 <Settings/>
             </Layout>
