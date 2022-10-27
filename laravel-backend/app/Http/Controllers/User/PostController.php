@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\User\Post;
 use Illuminate\Http\Request;
 use Exception;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Validator;
 
 class PostController extends Controller
@@ -176,10 +177,8 @@ class PostController extends Controller
     }
     public function delete($id){
         try{
-            $post=Post::where('id', $id)->where("user_id", auth()->user()->id)->first();
-            $post->delete();
-
-            if($post){
+            $res=Post::where('id', $id)->where('user_id', auth()->user()->id)->delete();
+            if($res){
                 return response()->json([ 
                     "success"=> true,
                     "msg" => "Successfully deleted",

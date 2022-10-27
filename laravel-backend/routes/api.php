@@ -30,9 +30,7 @@ Route::post('/register', [LoginRegController::class, "register"]);
 Route::group(['middleware' => ['auth:sanctum']], function () {
     Route::get('/user', [UserController::class, "getUserData"]);
     Route::get('/home', [UserController::class, "userFeedLoad"]);
-    Route::get('/posts/draft', [UserController::class, "userPostsDraft"]);
-    Route::get('/posts/published', [UserController::class, "userPostsPublished"]);
-    Route::get('/posts/scheduled', [UserController::class, "userPostsScheduled"]);
+
 
 
     Route::post('/user/update', [UserController::class, "updateUserData"]);
@@ -45,6 +43,10 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
     Route::post('/post/publish', [PostController::class, "publish_uncreated"])->middleware('postrule');
     Route::post('/post/schedule', [PostController::class, "schedule"])->middleware(['schedulerule','postrule']);
     Route::post('/post/publish-created/{id}', [PostController::class, "publish_created"])->middleware('postrule');
+    Route::post('/post/delete/{id}', [PostController::class, "delete"]);
+    Route::get('/posts/draft', [UserController::class, "userPostsDraft"]);
+    Route::get('/posts/published', [UserController::class, "userPostsPublished"]);
+    Route::get('/posts/scheduled', [UserController::class, "userPostsScheduled"]);
 
     
 

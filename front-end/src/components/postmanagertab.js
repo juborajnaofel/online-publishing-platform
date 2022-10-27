@@ -8,7 +8,7 @@ export default function PostManagerTab() {
   const [data_draft, setDraft] = useState([]);
   const [data_published, setDataPublished] = useState([]);
   const [data_scheduled, setDataScheduled] = useState([]);
-
+  const [listchange, setLC] = useState(false);
   useEffect(()=>{
     fetch(BackendApi.baseurl+'/api/posts/draft', {
     method: 'GET',
@@ -23,7 +23,7 @@ export default function PostManagerTab() {
             setDraft(data.data);
         }
     });
-  },[]);
+  },[listchange]);
 
 
   useEffect(()=>{
@@ -40,7 +40,7 @@ export default function PostManagerTab() {
             setDataPublished(data.data);
         }
     });
-  },[]);
+  },[listchange]);
   
 
   useEffect(()=>{
@@ -57,7 +57,7 @@ export default function PostManagerTab() {
             setDataScheduled(data.data);
         }
     });
-  },[]);
+  },[listchange]);
 
 
   return (
@@ -71,7 +71,7 @@ export default function PostManagerTab() {
         {
             data_draft.map((item, index)=>{
       
-                return <><PostCard key={item.id} title={item.title} description={item.description} 
+                return <><PostCard triggerchange={listchange} setLC={setLC} id={item.id} draft={true} key={item.id} title={item.title} description={item.description} 
                 created_at={ typeof item.created_at === "string"? item.created_at.slice(0,16).replace('T', ' '): "" }/><br/></>    
             })
         }
@@ -79,7 +79,7 @@ export default function PostManagerTab() {
       <Tab eventKey="scheduled" title="Scheduled">
             {
                 data_scheduled.map((item, index)=>{
-                    return <><PostCard key={item.id} title={item.title} description={item.description}
+                    return <><PostCard triggerchange={listchange}  setLC={setLC} id={item.id} key={item.id} title={item.title} description={item.description}
                     scheduled_at= {item.scheduled_at}
                     created_at={ typeof item.created_at === "string"? item.created_at.slice(0,16).replace('T', ' '): "" }/><br/></>  
                 })
@@ -88,7 +88,7 @@ export default function PostManagerTab() {
       <Tab eventKey="published" title="Published">
         {
             data_published.map((item, index)=>{
-                return <><PostCard key={item.id} title={item.title} description={item.description}
+                return <><PostCard triggerchange={listchange}  setLC={setLC} id={item.id} key={item.id} title={item.title} description={item.description}
                 created_at={ typeof item.created_at === "string"? item.created_at.slice(0,16).replace('T', ' '): "" }/><br/></>  
             })
         }
