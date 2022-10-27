@@ -76,6 +76,9 @@ export default function CreatePostForm(){
           });
     }
     function schedule_post(){
+      if( localStorage.getItem("membership") === "null" || JSON.parse(localStorage.getItem("membership"))["type"] === "free" ){
+        alert("Post scheduling is only for premium members");
+      }
       const payload = {
         title: title,
         description: des,
