@@ -14,6 +14,8 @@ class Post extends Model
         'description',
         'user_id',
         'status',
-        'scheduled_at'
+        'scheduled_at',
+        'published_at'
+
     ];
 }

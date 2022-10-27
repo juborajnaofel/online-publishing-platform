@@ -72,13 +72,15 @@ export default function CreatePostForm(){
           .then((data) => {
             if(data.success === true){
               navigate('/posts-manager');
+            }else{
+              alert(data.msg);
             }
           });
     }
     function schedule_post(){
-      if( localStorage.getItem("membership") === "null" || JSON.parse(localStorage.getItem("membership"))["type"] === "free" ){
-        alert("Post scheduling is only for premium members");
-      }
+      // if( localStorage.getItem("membership") === "null" || JSON.parse(localStorage.getItem("membership"))["type"] === "free" ){
+      //   alert("Post scheduling is only for premium members");
+      // }
       const payload = {
         title: title,
         description: des,
@@ -108,6 +110,8 @@ export default function CreatePostForm(){
       .then((data) => {
         if(data.success === true){
           navigate('/posts-manager');
+        }else{
+          alert(data.msg);
         }
       });
     } 

@@ -81,7 +81,7 @@ class PostController extends Controller
             }
 
 
-            $inputs = ['user_id'=> auth()->user()->id,'title' => $request->title,'description' => $request->description, 'status' => "published"];
+            $inputs = ['published_at'=>date('Y-m-d H:i:s'),'user_id'=> auth()->user()->id,'title' => $request->title,'description' => $request->description, 'status' => "published"];
             $post = Post::create($inputs);
             return response()->json([ 
                 "success"=> true,
@@ -98,6 +98,7 @@ class PostController extends Controller
         try{
             $post = Post::where('user_id', auth()->user()->id)->where("id",$id)->first();
             $post->status = "published";
+            $post->published_at=date('Y-m-d H:i:s');
             $post->save();
             return response()->json([ 
                 "success"=> true,

@@ -24,7 +24,8 @@ class Kernel extends ConsoleKernel
             ->having('scheduled_at', '<', 'now()')
             ->update([
                 'status' => 'published',
-                'scheduled_at' => null
+                'scheduled_at' => null,
+                'published_at'=>date('Y-m-d H:i:s')
              ]);
         })->everyMinute();
     }

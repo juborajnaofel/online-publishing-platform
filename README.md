@@ -9,7 +9,6 @@ Technologies used: laravel9, ReactJS, Bootstrap5
 <hr>
 <br>
 <br>
-<br>
 <h1>For laravel backend</h1>
 Make .env and give credentials for database and email
 

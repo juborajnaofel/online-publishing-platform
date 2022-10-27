@@ -42,9 +42,9 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
 
 
     Route::post('/post/save-draft', [PostController::class, "save_draft"]);
-    Route::post('/post/publish', [PostController::class, "publish_uncreated"]);
-    Route::post('/post/schedule', [PostController::class, "schedule"]);
-    Route::post('/post/publish-created/{id}', [PostController::class, "publish_created"]);
+    Route::post('/post/publish', [PostController::class, "publish_uncreated"])->middleware('postrule');
+    Route::post('/post/schedule', [PostController::class, "schedule"])->middleware(['schedulerule','postrule']);
+    Route::post('/post/publish-created/{id}', [PostController::class, "publish_created"])->middleware('postrule');
 
     
 

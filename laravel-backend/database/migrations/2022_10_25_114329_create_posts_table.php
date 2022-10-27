@@ -21,6 +21,7 @@ class CreatePostsTable extends Migration
             $table->foreignIdFor(User::class)->constrained();
             $table->string('status');
             $table->timestamp('scheduled_at')->nullable();
+            $table->timestamp('published_at')->nullable();
             $table->timestamps();
         });
     }
