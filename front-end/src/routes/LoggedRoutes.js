@@ -20,7 +20,7 @@ export default function LoggedRoutes(){
           <Route path='/' element={<FeedPage />} />
           <Route path='/profile' element={<ProfilePage/>} />
           <Route path='/create-new-post' element={<CreateNewPostPage/>} />
-          <Route path='/posts-manager' element={<PostManagerPage/>} />
+          <Route path='/posts-manager/:tab' element={<PostManagerPage/>} />
           <Route path='/settings' element={<SettingsPage/>} />
           <Route path='/change-membership' element={<ChangeMembershipPage/>} />
           <Route path='*' element={<NotfoundPage/>} />

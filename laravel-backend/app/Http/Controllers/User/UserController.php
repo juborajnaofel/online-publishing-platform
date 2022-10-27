@@ -73,27 +73,37 @@ class UserController extends Controller
 
     public function switchUserMembership(Request $request){
         try{
-            $validatedUserdata = Validator::make($request->all(),[
-                'type' => 'required',
-                'expire_at' => 'required',
-                'cost' => 'required',
-            ]);
-    
-            if($validatedUserdata->fails()){
-                return response()->json([ 
-                    "success"=> false,
-                    "msg" => "Validation failed!",
-                    "error" => $validatedUserdata->errors()
+            //stripe backend code should be here.
+            
+            if($request->type==='premium'){
+                $validatedUserdata = Validator::make($request->all(),[
+                    'card_number' => 'required',
+                    'type' => 'required'
                 ]);
+        
+                if($validatedUserdata->fails()){
+                    return response()->json([ 
+                        "success"=> false,
+                        "msg" => "Validation failed!",
+                        "error" => $validatedUserdata->errors()
+                    ]);
+                }
+
+                $inputs = ['user_id'=> auth()->user()->id,'type' => "premium",'cost' => 0, 'expire_at' => date('Y-m-d', strtotime('+1 years'))];
+                $membership = Membership::create($inputs);
+                return response()->json([ 
+                    "success"=> true,
+                    "msg" => "Updated membership successfully",
+                    "membership" => $membership
+                ],201);  
             }
-
-
-            $inputs = ['user_id'=> auth()->user()->id,'type' => $request->type,'cost' => $request->cost, 'expire_at' => $request->expire_at];
+            $inputs = ['user_id'=> auth()->user()->id,'type' => 'free','cost' => 0, 'expire_at' => null];
             $membership = Membership::create($inputs);
             return response()->json([ 
                 "success"=> true,
                 "msg" => "Updated membership successfully",
-            ],201);   
+                "membership" => $membership
+            ],201);
 
         }catch(Exception $e){
             return response()->json([ "success"=> false,"msg" => "Server Error"],500);

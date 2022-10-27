@@ -3,8 +3,10 @@ import Tabs from 'react-bootstrap/Tabs';
 import PostCard from './PostCard';
 import { useEffect, useState } from 'react';
 import { BackendApi } from '../config/BackendApi';
+import { useParams } from 'react-router-dom';
+
 export default function PostManagerTab() {
-  
+  let { tab } = useParams();
   const [data_draft, setDraft] = useState([]);
   const [data_published, setDataPublished] = useState([]);
   const [data_scheduled, setDataScheduled] = useState([]);
@@ -62,7 +64,7 @@ export default function PostManagerTab() {
 
   return (
     <Tabs
-      defaultActiveKey="draft"
+      defaultActiveKey={tab}
       id="fill-tab-example"
       className="mb-3"
       fill

@@ -41,7 +41,7 @@ export default function CreatePostForm(){
           }).then((response) => response.json())
           .then((data) => {
             if(data.success === true){
-              navigate('/posts-manager');
+              navigate('/posts-manager/draft');
             }
           });
     }
@@ -71,7 +71,7 @@ export default function CreatePostForm(){
           }).then((response) => response.json())
           .then((data) => {
             if(data.success === true){
-              navigate('/posts-manager');
+              navigate('/posts-manager/published');
             }else{
               alert(data.msg);
             }
@@ -109,7 +109,7 @@ export default function CreatePostForm(){
       }).then((response) => response.json())
       .then((data) => {
         if(data.success === true){
-          navigate('/posts-manager');
+          navigate('/posts-manager/scheduled');
         }else{
           alert(data.msg);
         }
