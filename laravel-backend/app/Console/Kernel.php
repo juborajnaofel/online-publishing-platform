@@ -2,10 +2,14 @@
 
 namespace App\Console;
 
+use App\Jobs\SendEmailJob;
+use App\Mail\PostNotificationMail;
 use App\Models\User\Post;
+use Exception;
 use Illuminate\Console\Scheduling\Schedule;
 use Illuminate\Foundation\Console\Kernel as ConsoleKernel;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Mail;
 
 class Kernel extends ConsoleKernel
 {
@@ -19,14 +23,29 @@ class Kernel extends ConsoleKernel
     {
         // $schedule->command('inspire')->hourly();
         $schedule->call(function () {
-            DB::table('posts')
+            $current = date('Y-m-d h:i:s');
+            $data = DB::table('posts')
+            ->select("*")
             ->where('scheduled_at','!=', null)
-            ->having('scheduled_at', '<', 'now()')
-            ->update([
-                'status' => 'published',
-                'scheduled_at' => null,
-                'published_at'=>date('Y-m-d H:i:s')
-             ]);
+            ->where('scheduled_at', '<', $current)
+            ->get();
+
+            //  var_dump(count($data));
+            //  var_dump($current);
+             if(count($data)>=1){
+                $res = DB::table('posts')
+                ->where('scheduled_at','!=', null)
+                ->where('scheduled_at', '<', $current)
+                ->update([
+                    'status' => 'published',
+                    'scheduled_at' => null,
+                    'published_at'=> $current
+                 ]);
+
+                foreach($data as $d){
+                    dispatch(new SendEmailJob($d));
+                }
+             }
         })->everyMinute();
     }
 

@@ -3,10 +3,13 @@
 namespace App\Http\Controllers\User;
 
 use App\Http\Controllers\Controller;
+use App\Jobs\SendEmailJob;
+use App\Mail\PostNotificationMail;
 use App\Models\User\Post;
 use Illuminate\Http\Request;
 use Exception;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Validator;
 
 class PostController extends Controller
@@ -67,6 +70,7 @@ class PostController extends Controller
         }
     }
     public function publish_uncreated(Request $request){
+        $post = null;
         try{
             $validatedUserdata = Validator::make($request->all(),[
                 'title' => 'required',
@@ -83,33 +87,48 @@ class PostController extends Controller
 
 
             $inputs = ['published_at'=>date('Y-m-d H:i:s'),'user_id'=> auth()->user()->id,'title' => $request->title,'description' => $request->description, 'status' => "published"];
-            $post = Post::create($inputs);
-            return response()->json([ 
-                "success"=> true,
-                "post"=> $post,
-                "msg" => "Published successfully",
-            ],201);   
+            $post = Post::create($inputs); 
 
         }catch(Exception $e){
             return response()->json([ "success"=> false,"msg" => "Server Error"],500);
         }
+        try{
+            dispatch(new SendEmailJob($post));
+        }catch(Exception $e){}
+
+
+        return response()->json([ 
+            "success"=> true,
+            "post"=> $post,
+            "msg" => "Published successfully",
+        ],201);  
+
     }
 
     public function publish_created($id){
+        $post = null;
         try{
             $post = Post::where('user_id', auth()->user()->id)->where("id",$id)->first();
             $post->status = "published";
             $post->published_at=date('Y-m-d H:i:s');
-            $post->save();
-            return response()->json([ 
-                "success"=> true,
-                "post"=> $post,
-                "msg" => "Published successfully",
-            ],201);   
+            $post->save();  
 
         }catch(Exception $e){
             return response()->json([ "success"=> false,"msg" => "Server Error"],500);
         }
+        try{
+            if($post){
+                dispatch(new SendEmailJob($post));
+            }
+        }catch(Exception $e){}
+
+
+        return response()->json([ 
+            "success"=> true,
+            "post"=> $post,
+            "msg" => "Published successfully",
+        ],201); 
+
     }
 
     public function schedule(Request $request){

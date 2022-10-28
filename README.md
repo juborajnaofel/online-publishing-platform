@@ -10,7 +10,12 @@ Technologies used: laravel9, ReactJS, Bootstrap5
 <br>
 <br>
 <h1>For laravel backend</h1>
-Make .env and give credentials for database and email
+
+Inside .env file,
+- ADMIN_MAIL_ADDRESS="sample@email.com" To receive email for new published posts, 
+- provide SMTP credentials
+- DB credentials
+- RADIS credentials
 
 <h4>Then in a terminal run these commands:</h4>
 
@@ -18,13 +23,16 @@ Make .env and give credentials for database and email
 - composer update
 - php artisan key:generate
 - php artisan migrate
-- php artisan db:seed --class=UserSeeder
-- php artisan db:seed --class=PostSeeder
+- php artisan db:seed
 - php artisan serve
 
 <h4>Then in a separate terminal run the scheduler:</h4>
 
 - php artisan schedule:work
+
+<h4>Then in a separate terminal run the queue:</h4>
+
+- php artisan queue:work
 
 
 <h1>For react frontend</h1>

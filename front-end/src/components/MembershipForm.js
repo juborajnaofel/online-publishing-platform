@@ -38,12 +38,15 @@ export default function MembershipForm(){
 
     
     return <>
-    <h3>Current membership details</h3>
-    <p><b>Expire at:</b> { JSON.parse(localStorage.getItem("membership"))["expire_at"]==null? "infinity":JSON.parse(localStorage.getItem("membership"))["expire_at"] }</p>
-    <p><b>Type</b>: { JSON.parse(localStorage.getItem("membership"))["type"] }</p>
     <MembershipAlert/>
     {localStorage.getItem("membership") === "null" || JSON.parse(localStorage.getItem("membership"))["type"] === "free" ? 
           <>
+            <div>
+                <h3>Current membership details</h3>
+                <p><b>Expire at:</b> infinity</p>
+                <p><b>Type</b>: free</p>
+            </div>
+
             <div>
                 <br></br>
                 <h2>Get our premium plan:</h2>
@@ -67,10 +70,17 @@ export default function MembershipForm(){
             </div>
             </>
             :
-
+            <>
+            <div>
+                <h3>Current membership details</h3>
+                <p><b>Expire at:</b> { JSON.parse(localStorage.getItem("membership"))["expire_at"]==null? "infinity":JSON.parse(localStorage.getItem("membership"))["expire_at"] }</p>
+                <p><b>Type</b>: { JSON.parse(localStorage.getItem("membership"))["type"] }</p>
+            </div>
             <div>
                 <Button variant="warning" onClick={()=>updateInfo("free")}>Revert to Free Membership</Button>{' '}
             </div>
+            </>
+
         }
 
             <br/>
