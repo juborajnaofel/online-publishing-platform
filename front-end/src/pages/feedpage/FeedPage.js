@@ -60,7 +60,7 @@ export default function FeedPage(){
 
                 {
                     data.map((item, index)=>{
-                        return <><PostCard key={item.id} title={item.title} description={item.description} link={"B"+item.id}/><br/></>     
+                        return <><PostCard feedpage={true} id={item.id} key={item.id} title={item.title} description={item.description} published_at={item.published_at}/><br/></>     
                     })
                 }
             </Layout>

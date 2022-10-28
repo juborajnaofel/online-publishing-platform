@@ -114,6 +114,7 @@ class UserController extends Controller
         try{
             $posts = Post::where('user_id', auth()->user()->id)
             ->where('status', 'draft')
+            ->orderBy('created_at', "DESC")
             ->get();
             return response()->json([ "success"=> true,
                                     "msg" => "User's drafts",
@@ -129,6 +130,7 @@ class UserController extends Controller
         try{
             $posts = Post::where('user_id', auth()->user()->id)
             ->where('status', 'scheduled')
+            ->orderBy('scheduled_at', "DESC")
             ->get();
             return response()->json([ "success"=> true,
                                     "msg" => "User's drafts",
@@ -144,6 +146,7 @@ class UserController extends Controller
         try{
             $posts = Post::where('user_id', auth()->user()->id)
             ->where('status', 'published')
+            ->orderBy('published_at', "DESC")
             ->get();
             return response()->json([ "success"=> true,
                                     "msg" => "User's Published",
@@ -158,6 +161,7 @@ class UserController extends Controller
     public function userFeedLoad(){
         try{
             $posts = Post::where('status', 'published')
+            ->where('user_id',"!=",auth()->user()->id)
             ->orderBy('created_at', "DESC")
             ->get();
             return response()->json([ "success"=> true,

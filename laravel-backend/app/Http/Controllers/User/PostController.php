@@ -38,7 +38,6 @@ class PostController extends Controller
         }catch(Exception $e){
             return response()->json([ "success"=> false,"msg" => "Server Error"],500);
         }
-        
     }
   
     public function save_draft(Request $request){

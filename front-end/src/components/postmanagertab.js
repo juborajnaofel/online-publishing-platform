@@ -71,28 +71,37 @@ export default function PostManagerTab() {
     >
       <Tab eventKey="draft" title="Draft">
         {
+            data_draft.length !== 0?
             data_draft.map((item, index)=>{
       
                 return <><PostCard triggerchange={listchange} setLC={setLC} id={item.id} draft={true} key={item.id} title={item.title} description={item.description} 
                 created_at={ typeof item.created_at === "string"? item.created_at.slice(0,16).replace('T', ' '): "" }/><br/></>    
             })
+            :
+            <>No draft found</>
         }
       </Tab>
       <Tab eventKey="scheduled" title="Scheduled">
             {
+                data_scheduled.length !== 0?
                 data_scheduled.map((item, index)=>{
                     return <><PostCard triggerchange={listchange}  setLC={setLC} id={item.id} key={item.id} title={item.title} description={item.description}
                     scheduled_at= {item.scheduled_at}
                     created_at={ typeof item.created_at === "string"? item.created_at.slice(0,16).replace('T', ' '): "" }/><br/></>  
                 })
+                :
+                <>No scheduled posts found</>
             }
       </Tab>
       <Tab eventKey="published" title="Published">
         {
+            data_published.length !== 0?
             data_published.map((item, index)=>{
-                return <><PostCard triggerchange={listchange}  setLC={setLC} id={item.id} key={item.id} title={item.title} description={item.description}
+                return <><PostCard published_at={item.published_at} triggerchange={listchange}  setLC={setLC} id={item.id} key={item.id} title={item.title} description={item.description}
                 created_at={ typeof item.created_at === "string"? item.created_at.slice(0,16).replace('T', ' '): "" }/><br/></>  
             })
+            :
+            <>No published posts found</>
         }
       </Tab>
     </Tabs>

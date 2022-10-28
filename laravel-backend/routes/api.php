@@ -47,6 +47,7 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
     Route::get('/posts/draft', [UserController::class, "userPostsDraft"]);
     Route::get('/posts/published', [UserController::class, "userPostsPublished"]);
     Route::get('/posts/scheduled', [UserController::class, "userPostsScheduled"]);
+    Route::get('/view-a-post/{id}', [PostController::class, "view_any"]);
 
     
 

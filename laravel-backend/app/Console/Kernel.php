@@ -23,23 +23,27 @@ class Kernel extends ConsoleKernel
     {
         // $schedule->command('inspire')->hourly();
         $schedule->call(function () {
-            $current = date('Y-m-d h:i:s');
+            $current_date = date('Y-m-d');
+            $current_time = date('H:i:s');
             $data = DB::table('posts')
             ->select("*")
-            ->where('scheduled_at','!=', null)
-            ->where('scheduled_at', '<', $current)
+            ->where('scheduled_at','!=', NULL)
+            ->whereDate('scheduled_at','<=', $current_date)
+            ->having(DB::raw('TIME(scheduled_at)'),'<',$current_time)
             ->get();
 
-            //  var_dump(count($data));
-            //  var_dump($current);
+            // var_dump(count($data));
+            // var_dump($current_date);
+            // var_dump($current_time);
              if(count($data)>=1){
                 $res = DB::table('posts')
-                ->where('scheduled_at','!=', null)
-                ->where('scheduled_at', '<', $current)
+                ->where('scheduled_at','!=', NULL)
+                ->whereDate('scheduled_at','<=', $current_date)
+                ->having(DB::raw('TIME(scheduled_at)'),'<',$current_time)
                 ->update([
                     'status' => 'published',
                     'scheduled_at' => null,
-                    'published_at'=> $current
+                    'published_at'=> date('Y-m-d H:i:s')
                  ]);
 
                 foreach($data as $d){
