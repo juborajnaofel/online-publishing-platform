@@ -71,7 +71,7 @@ class PostController extends Controller
 
             $inputs = ['user_id'=> auth()->user()->id,'title' => $request->title,'description' => $request->description, 'status' => "draft"];
             $post = Post::create($inputs);
-
+            $post->isLiked = false;
             Cache::put('post_'.$post->id, $post);
             Cache::forget('user_posts_feed_'.auth()->user()->id);
             Cache::forget('user_posts_draft_'.auth()->user()->id);
@@ -107,7 +107,7 @@ class PostController extends Controller
 
             $inputs = ['published_at'=>date('Y-m-d H:i:s'),'user_id'=> auth()->user()->id,'title' => $request->title,'description' => $request->description, 'status' => "published"];
             $post = Post::create($inputs); 
-
+            $post->isLiked = false;
         }catch(Exception $e){
             return response()->json([ "success"=> false,"msg" => "Server Error"],500);
         }
@@ -136,7 +136,8 @@ class PostController extends Controller
             $post->status = "published";
             $post->published_at=date('Y-m-d H:i:s');
             $post->save();  
-
+         
+            $post->isLiked = false;
             Cache::put('post_'.$id, $post);
             Cache::forget('user_posts_feed_'.auth()->user()->id);
             Cache::forget('user_posts_draft_'.auth()->user()->id);
@@ -151,8 +152,7 @@ class PostController extends Controller
                 dispatch(new SendEmailJob($post));
             }
         }catch(Exception $e){}
-
-
+        
         return response()->json([ 
             "success"=> true,
             "post"=> $post,
@@ -184,7 +184,7 @@ class PostController extends Controller
                         'scheduled_at'=> $request->datetime];
 
             $post = Post::create($inputs);
-
+            $post->isLiked = false;
             Cache::put('post_'.$post->id, $post);
             Cache::forget('user_posts_feed_'.auth()->user()->id);
             Cache::forget('user_posts_draft_'.auth()->user()->id);

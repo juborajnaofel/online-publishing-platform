@@ -49,7 +49,7 @@ class Kernel extends ConsoleKernel
 
                 foreach($data as $d){
                     dispatch(new SendEmailJob($d));
-                    Cache::put('post_'.$d->id, $d);
+                    Cache::put('post_'.$d["id"], $d);
                     Cache::forget('user_posts_feed_'.auth()->user()->id);
                     Cache::forget('user_posts_draft_'.auth()->user()->id);
                     Cache::forget('user_posts_published_'.auth()->user()->id);
