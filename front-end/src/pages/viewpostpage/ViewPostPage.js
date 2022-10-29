@@ -11,6 +11,7 @@ import Comments from "../../components/Comments";
 export default function ViewPostPage(){
     const [data, setData] = useState([]);
     const {id} = useParams();
+    const [triggerChange, setTriggerChange] = useState(false)
     useEffect(()=>{
         fetch(BackendApi.baseurl+'/api/view-a-post/'+id, {
         method: 'GET',
@@ -25,7 +26,7 @@ export default function ViewPostPage(){
                 setData(data.data);
             }
         });
-    },[id]);
+    },[id, triggerChange]);
 
     function like(){
         const payload = {
@@ -46,7 +47,7 @@ export default function ViewPostPage(){
           }).then((response) => response.json())
           .then((data) => {
             if(data.success === true){
-                window.location.reload();
+                setTriggerChange(!triggerChange);
             }
           });
     }

@@ -93,6 +93,7 @@ class LikeCommentController extends Controller
                     "error" => $validatedUserdata->errors()
                 ]);
             }
+            Cache::forget('comments_post_'.$request->post_id);
             Cache::forget('post_'.$request->post_id);
             Cache::forget('user_posts_feed_'.auth()->user()->id);
 

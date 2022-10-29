@@ -196,6 +196,7 @@ class UserController extends Controller
     }   
 
     public function userFeedLoad(){
+        
         try{
             if(!Cache::has('user_posts_feed_'.auth()->user()->id)){
                 // $posts = Post::where('status', 'published')

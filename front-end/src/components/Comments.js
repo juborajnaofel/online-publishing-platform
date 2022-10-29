@@ -6,6 +6,7 @@ import Button from 'react-bootstrap/Button';
 export default function Comments({post_id}){
     const [data, setData] = useState([]);
     const [comment, setComment] = useState("");
+    const [commentTrigger, setCommentTrigger] = useState(true);
     function getComment(e){
         setComment(e.target.value);
     }
@@ -25,7 +26,7 @@ export default function Comments({post_id}){
                 setData(data.comments);
             }
         });
-    },[]);    
+    },[commentTrigger]);    
 
     function comment_submit(){
       const payload = {
@@ -49,7 +50,7 @@ export default function Comments({post_id}){
       }).then((response) => response.json())
       .then((data) => {
         if(data.success === true){
-          window.location.reload();
+            setCommentTrigger(!commentTrigger)
         }else{
           alert(data.msg);
         }
