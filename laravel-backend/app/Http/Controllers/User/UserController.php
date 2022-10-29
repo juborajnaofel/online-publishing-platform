@@ -11,6 +11,7 @@ use Exception;
 use Illuminate\Support\Facades\Hash;
 use App\Models\User\Membership;
 use Illuminate\Support\Facades\Cache;
+use Illuminate\Support\Facades\DB;
 
 class UserController extends Controller
 {
@@ -197,12 +198,23 @@ class UserController extends Controller
     public function userFeedLoad(){
         try{
             if(!Cache::has('user_posts_feed_'.auth()->user()->id)){
-                $posts = Post::where('status', 'published')
-                ->where('user_id',"!=",auth()->user()->id)
-                ->orderBy('created_at', "DESC")
+                // $posts = Post::where('status', 'published')
+                // ->where('user_id',"!=",auth()->user()->id)
+                // ->orderBy('created_at', "DESC")
+                // ->get();
+
+                $posts = Post::select('posts.*')
+                ->selectRaw('COUNT(DISTINCT comments.id) as total_comments')
+                ->selectRaw('COUNT(DISTINCT likes.id) as total_likes')
+                ->leftJoin('comments', 'posts.id','=', 'comments.post_id')
+                ->leftJoin('likes', 'posts.id','=', 'likes.post_id')
+                ->where('posts.status', 'published')
+                ->where('posts.user_id',"!=",auth()->user()->id)
+                ->groupBy('posts.id')
+                ->orderBy('posts.created_at', "DESC")
                 ->get();
 
-                Cache::add('user_posts_feed_'.auth()->user()->id, $posts);
+                Cache::put('user_posts_feed_'.auth()->user()->id, $posts);
             
             }else{
                 $posts = Cache::get('user_posts_feed_'.auth()->user()->id);

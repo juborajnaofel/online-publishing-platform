@@ -1,5 +1,6 @@
 <?php
 use App\Http\Controllers\LoginRegController;
+use App\Http\Controllers\User\LikeCommentController;
 use App\Http\Controllers\User\PostController;
 use App\Http\Controllers\User\UserController;
 use Illuminate\Http\Request;
@@ -50,7 +51,7 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
     Route::get('/view-a-post/{id}', [PostController::class, "view_any"]);
     Route::post('/update-a-post', [PostController::class, "update_post"]);
 
-    
+    Route::post('/user/like-toggle', [LikeCommentController::class,"like_toggle"]);
 
 
     Route::post('/logout', [LoginRegController::class, 'logout']);

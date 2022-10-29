@@ -18,4 +18,10 @@ class Post extends Model
         'published_at'
 
     ];
+
+    public function comments()
+    {
+        return $this->hasMany(Comment::class);
+    }
+
 }

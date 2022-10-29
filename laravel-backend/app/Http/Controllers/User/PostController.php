@@ -5,6 +5,7 @@ namespace App\Http\Controllers\User;
 use App\Http\Controllers\Controller;
 use App\Jobs\SendEmailJob;
 use App\Mail\PostNotificationMail;
+use App\Models\User\Like;
 use App\Models\User\Post;
 use Illuminate\Http\Request;
 use Exception;
@@ -16,26 +17,29 @@ use Illuminate\Support\Facades\Validator;
 class PostController extends Controller
 {
 
-    // public function view_own($id){
-    //     try{
-    //         $post = Post::where('user_id', auth()->user()->id)->where("id", $id)->first();
-    //         return response()->json([ "success"=> true,
-    //                                 "msg" => "View post",
-    //                                 "data" => $post
-    //                             ],200);
-    //     }catch(Exception $e){
-    //         return response()->json([ "success"=> false,"msg" => "Server Error"],500);
-    //     }
-        
-    // }
-
     public function view_any($id){
         try{
             if (!Cache::has('post_'.$id)) {
                 
-                $post = Post::where("id", $id)->first();
+                // $post = Post::where("id", $id)->first();
 
-                Cache::add('post_'.$id, $post);
+                $post = Post::select('posts.*', 'users.name as author')
+                ->selectRaw('COUNT(DISTINCT comments.id) as total_comments')
+                ->selectRaw('COUNT(DISTINCT likes.id) as total_likes')
+                ->leftJoin('comments', 'posts.id','=', 'comments.post_id')
+                ->leftJoin('likes', 'posts.id','=', 'likes.post_id')
+                ->leftJoin('users', 'posts.user_id', '=', 'users.id')
+                ->where("posts.id", $id)
+                ->groupBy('posts.id')
+                ->first();
+
+                $post->isLiked = false;
+                $isLiked = Like::where('user_id', auth()->user()->id)->where("post_id", $post->id)->first();
+                if($isLiked){
+                    $post->isLiked = true;
+                }
+
+                Cache::put('post_'.$id, $post);
 
             }else{
                 $post = Cache::get('post_'.$id);

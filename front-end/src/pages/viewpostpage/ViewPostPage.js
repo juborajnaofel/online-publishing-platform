@@ -5,6 +5,8 @@ import Alert from 'react-bootstrap/Alert';
 import { BackendApi } from "../../config/BackendApi";
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
+import Button from "react-bootstrap/esm/Button";
+import Comments from "../../components/Comments";
 
 export default function ViewPostPage(){
     const [data, setData] = useState([]);
@@ -25,6 +27,31 @@ export default function ViewPostPage(){
         });
     },[id]);
 
+    function like(){
+        const payload = {
+            isLiked: data.isLiked,
+            post_id: id,
+          }
+      
+
+
+          fetch(BackendApi.baseurl+'/api/user/like-toggle', {
+            method: 'POST',
+            headers: {
+              Accept: 'application/json',
+              'Content-Type': 'application/json',
+              'Authorization': 'Bearer '+localStorage.getItem("token") 
+            },
+            body: JSON.stringify(payload)
+          }).then((response) => response.json())
+          .then((data) => {
+            if(data.success === true){
+                alert(data.msg);
+                window.location.reload();
+            }
+          });
+    }
+
     return <>
         <d>
             <NavbarLogged/>
@@ -36,11 +63,15 @@ export default function ViewPostPage(){
                 <br></br>
                 <div>
                     <h1>{data.title}</h1>
-                    <p><b>Published at:</b>{data.published_at}</p>
+                    <p><b>Published at: </b>{data.published_at}</p>
                     <br/>
-                     <b>Author:</b>{data.user_id}
+                     <b>Author: </b>{data.author}
                     <hr/>
                     <p>{data.description}</p>
+                    <span> <b>{data.total_comments}</b> Comments and </span>{"\u00A0"}  
+                    <span> <b>{data.total_likes}</b>Likes </span> 
+                    <Button size="sm" onClick={like}> {data.isLiked? 'Liked': 'Like'} </Button>
+                    <Comments/>
                 </div>
             </Layout>
         </d>

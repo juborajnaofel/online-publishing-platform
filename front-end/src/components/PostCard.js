@@ -68,7 +68,7 @@ export default function PostCard(props) {
           }
           {props.description.slice(0, 200)+"..."}{"\u00A0"}  <br/><br/><Button size='sm' variant="dark" onClick={()=> view(props.id)}>Read more</Button> 
         </Card.Text>
-          {!(props.feedpage) && 
+          {!(props.feedpage)? 
             <Card.Text>
               {
                 props.draft && 
@@ -80,6 +80,10 @@ export default function PostCard(props) {
                   <Button size='sm' variant="danger" onClick={()=> deletePost(props.id)}>Delete</Button>
                 </>
               }
+            </Card.Text>:
+            <Card.Text>
+              <span onClick={()=> view(props.id)} > <b>{props.total_comments}</b> Comments and </span>{"\u00A0"}  
+              <span onClick={()=> view(props.id)} > <b>{props.total_likes}</b>Likes </span>
             </Card.Text>
           }
           {/* <Card.Text>

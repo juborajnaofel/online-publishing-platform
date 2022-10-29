@@ -9,6 +9,9 @@ export default function Pagination({totalPosts, postsPerPage,setCurrentPage}){
             {pages.map((item,index)=>{
                 return <><button key={index} onClick={()=> setCurrentPage(item)}>{ item }</button>{"\u00A0"}</>;
             })}
+            <br/>
+            <br/>
+
         </>
     )
 }

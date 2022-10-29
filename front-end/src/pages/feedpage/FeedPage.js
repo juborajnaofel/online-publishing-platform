@@ -57,7 +57,7 @@ export default function FeedPage(){
     }
 
     const currentPosts =    data.map((item, index)=>{
-        return <><PostCard feedpage={true} id={item.id} key={item.id} title={item.title} description={item.description} published_at={item.published_at}/><br/></>     
+        return <><PostCard total_likes={item.total_likes} total_comments={item.total_comments} feedpage={true} id={item.id} key={item.id} title={item.title} description={item.description} published_at={item.published_at}/><br/></>     
     }).slice(firstPostIndex, lastPostIndex);
 
     return <>
