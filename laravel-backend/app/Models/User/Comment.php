@@ -12,6 +12,7 @@ class Comment extends Model
         'post_id',
         'comment',
         'parent_comment_id',
+        'commenter_id'
     ];
 
     public function posts()

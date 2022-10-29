@@ -83,7 +83,7 @@ export default function PostCard(props) {
             </Card.Text>:
             <Card.Text>
               <span onClick={()=> view(props.id)} > <b>{props.total_comments}</b> Comments and </span>{"\u00A0"}  
-              <span onClick={()=> view(props.id)} > <b>{props.total_likes}</b>Likes </span>
+              <span onClick={()=> view(props.id)} > <b>{props.total_likes}</b>Likes </span> {"\u00A0"}  {"\u00A0"}
             </Card.Text>
           }
           {/* <Card.Text>

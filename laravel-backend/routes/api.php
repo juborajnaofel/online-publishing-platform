@@ -52,6 +52,8 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
     Route::post('/update-a-post', [PostController::class, "update_post"]);
 
     Route::post('/user/like-toggle', [LikeCommentController::class,"like_toggle"]);
+    Route::get('/post/{post_id}/comments', [LikeCommentController::class, "loadComments"]);
+    Route::post('/post/comment', [LikeCommentController::class, "store_comment"]);
 
 
     Route::post('/logout', [LoginRegController::class, 'logout']);

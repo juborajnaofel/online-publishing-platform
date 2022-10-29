@@ -46,7 +46,6 @@ export default function ViewPostPage(){
           }).then((response) => response.json())
           .then((data) => {
             if(data.success === true){
-                alert(data.msg);
                 window.location.reload();
             }
           });
@@ -71,7 +70,7 @@ export default function ViewPostPage(){
                     <span> <b>{data.total_comments}</b> Comments and </span>{"\u00A0"}  
                     <span> <b>{data.total_likes}</b>Likes </span> 
                     <Button size="sm" onClick={like}> {data.isLiked? 'Liked': 'Like'} </Button>
-                    <Comments/>
+                    <Comments post_id={id}/>
                 </div>
             </Layout>
         </d>
