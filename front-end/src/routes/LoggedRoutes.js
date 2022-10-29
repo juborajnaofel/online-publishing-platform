@@ -14,6 +14,7 @@ import SettingsPage from '../pages/settingspage/SettingsPage';
 import CreateNewPostPage from '../pages/createnewpostpage/CreateNewPostPage';
 import ChangeMembershipPage from '../pages/changemembershippage/ChangeMembershipPage';
 import ViewPostPage from '../pages/viewpostpage/ViewPostPage';
+import EditPostPage from '../pages/editpostpage/EditPostPage';
 
 export default function LoggedRoutes(){
     return (<BrowserRouter>
@@ -24,6 +25,7 @@ export default function LoggedRoutes(){
           <Route path='/posts-manager/:tab' element={<PostManagerPage/>} />
           <Route path='/settings' element={<SettingsPage/>} />
           <Route path='/change-membership' element={<ChangeMembershipPage/>} />
+          <Route path='/edit/:id' element={<EditPostPage/>} />
           <Route path='/view/:id' element={<ViewPostPage/>} />
           <Route path='*' element={<NotfoundPage/>} />
         </Routes>

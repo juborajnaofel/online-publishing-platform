@@ -50,6 +50,10 @@ export default function PostCard(props) {
      navigate("/view/"+id);
   }
 
+  function editpost(id){
+    navigate("/edit/"+id);
+  }
+
   return (
     <Card>
       <Card.Body>
@@ -64,17 +68,20 @@ export default function PostCard(props) {
           }
         </Card.Text>
         <Card.Text>
-            {props.description.slice(0, 200)+"..."} <br/><Button variant="primary" onClick={()=> view(props.id)}>Read more</Button> 
+            {props.description.slice(0, 200)+"..."}{"\u00A0"}  <br/><br/><Button size='sm' variant="dark" onClick={()=> view(props.id)}>Read more</Button> 
         </Card.Text>
 
           <Card.Text>
             {
               props.draft && 
-                <Button variant="primary" onClick={()=> publish(props.id)}>Publish</Button> 
+                <Button size='sm' variant="primary" onClick={()=> publish(props.id)}>Publish</Button> 
             }{"\u00A0"}  
             {
               !(props.feedpage) && 
-              <Button variant="danger" onClick={()=> deletePost(props.id)}>Delete</Button>
+              <>
+                <Button size='sm' variant="secondary" onClick={()=> editpost(props.id)}>Edit</Button>{"\u00A0"}  
+                <Button size='sm' variant="danger" onClick={()=> deletePost(props.id)}>Delete</Button>
+              </>
             }
           </Card.Text>
           {/* <Card.Text>

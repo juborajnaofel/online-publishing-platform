@@ -163,9 +163,10 @@ class PostController extends Controller
             return response()->json([ "success"=> false,"msg" => "Server Error"],500);
         }
     }
-    public function edit(Request $request, $id){
+    public function update_post(Request $request){
         try{
             $validatedUserdata = Validator::make($request->all(),[
+                'id' => 'required',
                 'title' => 'required',
                 'description' => 'required',
             ]);
@@ -179,7 +180,7 @@ class PostController extends Controller
             }
 
 
-            $post = Post::where("id", $id)->where("user_id", auth()->user()->id)->first();
+            $post = Post::where("id", $request->id)->where("user_id", auth()->user()->id)->first();
             $post->title = $request->title;
             $post->description = $request->description;
             $post->save();
