@@ -15,7 +15,6 @@ Inside .env file,
 - ADMIN_MAIL_ADDRESS="sample@email.com" To receive email for new published posts, 
 - provide SMTP credentials
 - DB credentials
-- RADIS credentials
 
 <h4>Then in a terminal run these commands:</h4>
 

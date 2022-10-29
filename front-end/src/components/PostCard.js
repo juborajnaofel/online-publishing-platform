@@ -64,26 +64,24 @@ export default function PostCard(props) {
              <>Scheduled at: {props.scheduled_at}<br/></>
           }{
             props.published_at && 
-            <>Published at: {props.published_at}</>
+            <>Published at: {props.published_at}<br/></>
           }
+          {props.description.slice(0, 200)+"..."}{"\u00A0"}  <br/><br/><Button size='sm' variant="dark" onClick={()=> view(props.id)}>Read more</Button> 
         </Card.Text>
-        <Card.Text>
-            {props.description.slice(0, 200)+"..."}{"\u00A0"}  <br/><br/><Button size='sm' variant="dark" onClick={()=> view(props.id)}>Read more</Button> 
-        </Card.Text>
-
-          <Card.Text>
-            {
-              props.draft && 
-                <Button size='sm' variant="primary" onClick={()=> publish(props.id)}>Publish</Button> 
-            }{"\u00A0"}  
-            {
-              !(props.feedpage) && 
-              <>
-                <Button size='sm' variant="secondary" onClick={()=> editpost(props.id)}>Edit</Button>{"\u00A0"}  
-                <Button size='sm' variant="danger" onClick={()=> deletePost(props.id)}>Delete</Button>
-              </>
-            }
-          </Card.Text>
+          {!(props.feedpage) && 
+            <Card.Text>
+              {
+                props.draft && 
+                  <Button size='sm' variant="primary" onClick={()=> publish(props.id)}>Publish</Button> 
+              }{"\u00A0"}  
+              {
+                <>
+                  <Button size='sm' variant="secondary" onClick={()=> editpost(props.id)}>Edit</Button>{"\u00A0"}  
+                  <Button size='sm' variant="danger" onClick={()=> deletePost(props.id)}>Delete</Button>
+                </>
+              }
+            </Card.Text>
+          }
           {/* <Card.Text>
             <Button variant="dark" onClick={()=> deletePost(props.id)}>Like</Button>
           </Card.Text> */}

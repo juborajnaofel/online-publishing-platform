@@ -10,11 +10,18 @@ use Illuminate\Support\Facades\Validator;
 use Exception;
 use Illuminate\Support\Facades\Hash;
 use App\Models\User\Membership;
+use Illuminate\Support\Facades\Cache;
+
 class UserController extends Controller
 {
     public function getUserData(){
         $user = auth()->user();
-        $user['membership'] = Membership::where('user_id', auth()->user()->id)->orderBy('id', 'DESC')->first();
+        if(!Cache::has('user_membership_'.auth()->user()->id)){
+            $user['membership'] = Membership::where('user_id', auth()->user()->id)->orderBy('id', 'DESC')->first();
+            Cache::put('user_membership_'.auth()->user()->id, $user['membership']);
+        }else{
+            $user['membership'] = Cache::get('user_membership_'.auth()->user()->id);
+        }
         return response()->json($user, 200);
     }
 
@@ -37,6 +44,7 @@ class UserController extends Controller
             $user->name = $request->name;
             $user->email = $request->email;
             $user->save();
+
             return response()->json([ "success"=> true,"msg" => "Successfully updated", "data"=> $user],200);
         }catch(Exception $e){
             return response()->json([ "success"=> false,"msg" => "Server Error"],500);
@@ -91,6 +99,9 @@ class UserController extends Controller
 
                 $inputs = ['user_id'=> auth()->user()->id,'type' => "premium",'cost' => 0, 'expire_at' => date('Y-m-d', strtotime('+1 years'))];
                 $membership = Membership::create($inputs);
+
+                Cache::put('user_membership_'.auth()->user()->id, $membership);
+                
                 return response()->json([ 
                     "success"=> true,
                     "msg" => "Updated membership successfully",
@@ -99,6 +110,9 @@ class UserController extends Controller
             }
             $inputs = ['user_id'=> auth()->user()->id,'type' => 'free','cost' => 0, 'expire_at' => null];
             $membership = Membership::create($inputs);
+            
+            Cache::put('user_membership_'.auth()->user()->id, $membership);
+            
             return response()->json([ 
                 "success"=> true,
                 "msg" => "Updated membership successfully",
@@ -112,10 +126,17 @@ class UserController extends Controller
 
     public function userPostsDraft(){
         try{
-            $posts = Post::where('user_id', auth()->user()->id)
-            ->where('status', 'draft')
-            ->orderBy('created_at', "DESC")
-            ->get();
+            if(!Cache::has('user_posts_draft_'.auth()->user()->id)){
+                $posts = Post::where('user_id', auth()->user()->id)
+                ->where('status', 'draft')
+                ->orderBy('created_at', "DESC")
+                ->get();
+
+                Cache::add('user_posts_draft_'.auth()->user()->id, $posts);
+            
+            }else{
+                $posts = Cache::get('user_posts_draft_'.auth()->user()->id);
+            }
             return response()->json([ "success"=> true,
                                     "msg" => "User's drafts",
                                     "total_records"=> $posts->count(),
@@ -128,10 +149,17 @@ class UserController extends Controller
 
     public function userPostsScheduled(){
         try{
-            $posts = Post::where('user_id', auth()->user()->id)
-            ->where('status', 'scheduled')
-            ->orderBy('scheduled_at', "DESC")
-            ->get();
+            if(!Cache::has('user_posts_scheduled_'.auth()->user()->id)){
+                $posts = Post::where('user_id', auth()->user()->id)
+                ->where('status', 'scheduled')
+                ->orderBy('scheduled_at', "DESC")
+                ->get();
+
+                Cache::add('user_posts_scheduled_'.auth()->user()->id, $posts);
+            
+            }else{
+                $posts = Cache::get('user_posts_scheduled_'.auth()->user()->id);
+            }
             return response()->json([ "success"=> true,
                                     "msg" => "User's drafts",
                                     "total_records"=> $posts->count(),
@@ -144,10 +172,18 @@ class UserController extends Controller
     
     public function userPostsPublished(){
         try{
-            $posts = Post::where('user_id', auth()->user()->id)
-            ->where('status', 'published')
-            ->orderBy('published_at', "DESC")
-            ->get();
+            if(!Cache::has('user_posts_published_'.auth()->user()->id)){
+
+                $posts = Post::where('user_id', auth()->user()->id)
+                ->where('status', 'published')
+                ->orderBy('published_at', "DESC")
+                ->get();
+                Cache::add('user_posts_published_'.auth()->user()->id, $posts);
+            
+            }else{
+                $posts = Cache::get('user_posts_published_'.auth()->user()->id);
+            }
+
             return response()->json([ "success"=> true,
                                     "msg" => "User's Published",
                                     "total_records"=> $posts->count(),
@@ -160,10 +196,17 @@ class UserController extends Controller
 
     public function userFeedLoad(){
         try{
-            $posts = Post::where('status', 'published')
-            ->where('user_id',"!=",auth()->user()->id)
-            ->orderBy('created_at', "DESC")
-            ->get();
+            if(!Cache::has('user_posts_feed_'.auth()->user()->id)){
+                $posts = Post::where('status', 'published')
+                ->where('user_id',"!=",auth()->user()->id)
+                ->orderBy('created_at', "DESC")
+                ->get();
+
+                Cache::add('user_posts_feed_'.auth()->user()->id, $posts);
+            
+            }else{
+                $posts = Cache::get('user_posts_feed_'.auth()->user()->id);
+            }
             return response()->json([ "success"=> true,
                                     "msg" => "User's drafts",
                                     "total_records"=> $posts->count(),

@@ -8,6 +8,7 @@ use App\Models\User\Post;
 use Exception;
 use Illuminate\Console\Scheduling\Schedule;
 use Illuminate\Foundation\Console\Kernel as ConsoleKernel;
+use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Mail;
 
@@ -48,6 +49,11 @@ class Kernel extends ConsoleKernel
 
                 foreach($data as $d){
                     dispatch(new SendEmailJob($d));
+                    Cache::put('post_'.$d->id, $d);
+                    Cache::forget('user_posts_feed_'.auth()->user()->id);
+                    Cache::forget('user_posts_draft_'.auth()->user()->id);
+                    Cache::forget('user_posts_published_'.auth()->user()->id);
+                    Cache::forget('user_posts_scheduled_'.auth()->user()->id);
                 }
              }
         })->everyMinute();
