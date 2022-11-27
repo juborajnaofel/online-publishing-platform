@@ -46,14 +46,15 @@ class Kernel extends ConsoleKernel
                     'scheduled_at' => null,
                     'published_at'=> date('Y-m-d H:i:s')
                  ]);
-
-                foreach($data as $d){
-                    dispatch(new SendEmailJob($d));
-                    Cache::put('post_'.$d["id"], $d);
-                    Cache::forget('user_posts_feed_'.auth()->user()->id);
-                    Cache::forget('user_posts_draft_'.auth()->user()->id);
-                    Cache::forget('user_posts_published_'.auth()->user()->id);
-                    Cache::forget('user_posts_scheduled_'.auth()->user()->id);
+                if($res){
+                    foreach($data as $d){
+                        dispatch(new SendEmailJob($d));
+                        Cache::forget('user_posts_feed_'.$d->user_id);
+                        Cache::forget('user_posts_draft_'.$d->user_id);
+                        Cache::forget('user_posts_published_'.$d->user_id);
+                        Cache::forget('user_posts_scheduled_'.$d->user_id);
+                        Cache::put('post_'.$d->id, $d);
+                    }
                 }
              }
         })->everyMinute();
